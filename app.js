@@ -2,11 +2,32 @@ const express = require('express');
 const logger = require('morgan');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const sgMail = require('@sendgrid/mail');
 
 dotenv.config();
 
+const { SENDGRID_API_KEY, EMAIL_FROM } = process.env;
 const usersRouter = require('./routes/api/users');
 const contactsRouter = require('./routes/api/contacts');
+
+sgMail.setApiKey(SENDGRID_API_KEY);
+
+const email = {
+  to: 'wolova5409@xtrempro.com',
+  from: EMAIL_FROM,
+  text: 'Test ',
+  subject: 'Test',
+  html: '<p>Вам письмо<p>',
+};
+
+sgMail
+  .send(email)
+  .then(() => {
+    console.log('Email sent');
+  })
+  .catch(error => {
+    console.error(error);
+  });
 
 const app = express();
 
