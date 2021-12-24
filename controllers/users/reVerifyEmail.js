@@ -5,7 +5,6 @@ const sendEmail = require('../../utils/sendEmail');
 
 const reVerifyEmail = async (req, res) => {
   const { email } = req.body;
-  console.log(email);
 
   if (!email) {
     throw new BadRequest('missing required field email');
@@ -17,7 +16,7 @@ const reVerifyEmail = async (req, res) => {
     throw new BadRequest('User not found.');
   }
 
-  if (user.verify === true) {
+  if (user.verify) {
     throw new BadRequest('Verification has already been passed');
   }
 
