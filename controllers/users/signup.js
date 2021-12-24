@@ -22,9 +22,10 @@ const signup = async (req, res) => {
   const mail = {
     to: email,
     subject: 'Confirmation of registration',
-    text: `Confirm registration. To do this, pass the <a target= "_blank"  href="http://localhoct:300/users/verify/:${verificationToken},">link</a>`,
-    html: `<p>Confirm registration. To do this, pass the <a target= "_blank" href="http://localhoct:300/users/verify/${verificationToken},">link</a></p>`,
+    text: `Confirm registration. To do this, pass the <a target= "_blank"  href="http://localhoct:300/users/verify/${verifyToken},">link</a>`,
+    html: `<p>Confirm registration. To do this, pass the <a target= "_blank" href="http://localhoct:300/users/verify/${verifyToken},">link</a></p>`,
   };
+  console.log(mail);
 
   await sendEmail(mail);
 
