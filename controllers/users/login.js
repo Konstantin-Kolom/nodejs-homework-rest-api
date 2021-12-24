@@ -4,12 +4,28 @@ const { Unauthorized } = require('http-errors');
 
 const { SECRET_KEY } = process.env;
 
+const sendEmail = require('../../utils/sendEmail');
+
 const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
 
-  if (!user || !user.verify || !user.comparePassword(password)) {
-    throw new Unauthorized(`Email is wrong or not verify, or password is wrong`);
+  const mail = {
+    to: email,
+    subject: 'Confirmation of registration',
+    text: `Confirm registration. To do this, pass the <a target= "_blank"  href="http://localhoct:3000/users/verify/${user.verifyToken}">link</a>`,
+    html: `<p>Confirm registration. To do this, pass the <a target= "_blank" href="http://localhoct:3000/users/verify/${user.verifyToken}">link</a></p>`,
+  };
+
+  if (!user || !user.comparePassword(password)) {
+    throw new Unauthorized(`Email is wrong or password is wrong`);
+  }
+
+  if (!user.verify) {
+    await sendEmail(mail);
+    throw new Unauthorized(
+      `You have not confirmed your registration. Check your email ${email} and follow the link in the letter.`,
+    );
   }
 
   const payload = {
